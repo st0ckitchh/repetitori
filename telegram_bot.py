@@ -94,7 +94,7 @@ async def analyze_image_with_openai(image_data: bytes, question: str):
         }
         
         payload = {
-            "model": "o1-preview",
+            "model": "gpt-4o",
             "messages": [
                 {
                     "role": "user",
