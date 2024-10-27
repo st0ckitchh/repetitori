@@ -16,10 +16,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Bot Configuration
-TELEGRAM_TOKEN = "7818586066:AAEq1AMLrIk0Zmy2xBRgKrBV8hunM0If5rw"
-OPENAI_KEY = "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"
-ANTHROPIC_KEY = "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"
+# Bot Configuration from Heroku environment variables
+TELEGRAM_TOKEN = os.environ.get('TELEGRAM_TOKEN')
+OPENAI_KEY = os.environ.get('OPENAI_KEY')
+ANTHROPIC_KEY = os.environ.get('ANTHROPIC_KEY')
+
+# Validate environment variables
+if not all([TELEGRAM_TOKEN, OPENAI_KEY, ANTHROPIC_KEY]):
+    logger.error("Missing required environment variables. Please check Heroku config vars.")
+    raise ValueError("Missing required environment variables")
 
 # User State Storage
 user_states: Dict[int, Dict] = {}
@@ -149,7 +154,7 @@ async def translate_with_claude(text: str):
         
         payload = {
             "model": "claude-3-5-sonnet-20241022",
-            "max_tokens": 4000,  # Changed from 5000 to 4000 to stay within limits
+            "max_tokens": 4000,
             "messages": [
                 {
                     "role": "user",
